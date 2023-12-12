@@ -31,4 +31,13 @@ export class UserService {
     return await user.update({ status: 'disabled' })
   }
 
+  static async findOneByEmail(email){
+    return await User.findOne({
+      where: {
+        status: 'available',
+        email: email
+      }
+    })
+  }
+
 }

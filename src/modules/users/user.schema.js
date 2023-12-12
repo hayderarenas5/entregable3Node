@@ -36,8 +36,34 @@ export function validateUser(data) {
     }
 }
 
+const loginUserSchema =z.object({
+    email: z
+        .string({
+            invalid_type_error: "Email must be a correct format",
+            required_error: "Email is required",
+        })
+        .email({message: "Invalid email"})
+        .min(3, {message: "Email is too short"})
+        .max(50, {message:"Email is too long"}),
+    password: z
+        .string({required_error: "password is required"})
+        .min(8, {message: "Password must be at least 8 characters"})
+})
+
 export function validatePartialUser(data) {
     const result= registerSchema.partial().safeParse(data)
+
+    const {hasError, errorMessage, data: userData}= extractValidationData(result)
+
+    return{
+        hasError,
+        errorMessage,
+        userData
+    }
+}
+
+export function validateLogin(data) {
+    const result= loginUserSchema.safeParse(data)
 
     const {hasError, errorMessage, data: userData}= extractValidationData(result)
 
